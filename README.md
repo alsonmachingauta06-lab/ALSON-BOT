@@ -1,5 +1,16 @@
-  
-🤖 Alson-Bot
+  # 🤖 Alson-Bot
+
+<p align="center">
+  <img src="assets/botimage.jpg" width="300" alt="Alson-Bot">
+</p>
+
+<p align="center">
+  <b>🚀 Alson-Bot — WhatsApp Multi-Device Bot</b>
+</p>
+
+<p align="center">
+  Powerful • Fast • Easy to Use
+</p>
 
 <div align="center">🚀 Alson-Bot — WhatsApp Multi-Device Bot
 
