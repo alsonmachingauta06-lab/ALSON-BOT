@@ -1,7 +1,7 @@
   # 🤖 Alson-Bot
 
 <p align="center">
-  <img src="assets/botimage.jpg" width="300" alt="Alson-Bot">
+  <img src="assets/bot_image.jpg" width="300" alt="Alson-Bot">
 </p>
 
 <p align="center">
