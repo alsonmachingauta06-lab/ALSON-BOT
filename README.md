@@ -1,61 +1,53 @@
-  # 🤖 Alson-Bot
+<div align="center"><img src="assets/bot_image.jpg" width="220" alt="Alson XMD">⚡ ALSON XMD
 
-<p align="center">
-  <img src="assets/bot_image.jpg" width="300" alt="Alson-Bot">
-</p>
+🚀 Powerful • Stylish • Easy to Deploy
 
-<p align="center">
-  <b>🚀 Alson-Bot — WhatsApp Multi-Device Bot</b>
-</p>
+A WhatsApp bot built for the Alson community.
 
-<p align="center">
-  Powerful • Fast • Easy to Use
-</p>
+<p>
+  <a href="https://whatsapp.com/channel/0029Vb8pa9p5kg7CkpkxrR37">
+    <img src="https://img.shields.io/badge/WhatsApp%20Channel-Join%20Now-25D366?style=for-the-badge&logo=whatsapp&logoColor=white">
+  </a>
+  <img src="https://img.shields.io/badge/Node.js-Required-339933?style=for-the-badge&logo=node.js&logoColor=white">
+  <img src="https://img.shields.io/badge/Termux-Android-black?style=for-the-badge&logo=android&logoColor=white">
+</p></div>---
 
-<div align="center">🚀 Alson-Bot — WhatsApp Multi-Device Bot
+🟢 WhatsApp Channel
 
-A powerful and easy-to-use WhatsApp bot built with Node.js and Baileys.
+<div align="center">📢 JOIN THE OFFICIAL ALSON XMD CHANNEL
 
-Owner: Alson Machingauta
+<a href="https://whatsapp.com/channel/0029Vb8pa9p5kg7CkpkxrR37"><img src="https://img.shields.io/badge/💚%20JOIN%20WHATSAPP%20CHANNEL-25D366?style=for-the-badge"></a>Get updates, fixes, announcements and new bot features.
 
 </div>---
 
-✨ Features
+✨ About Alson XMD
 
-- 🤖 AI Chatbot
-- 🎵 Music commands
-- 📥 Media tools
-- 👥 Group management
-- 🛠️ Owner commands
-- 🖼️ Bot profile picture control
-- ⚡ Fast WhatsApp pairing
-- 🔄 Automatic reconnection
-- 📱 Works with Android + Termux
-- 🚫 No prefix required for supported commands
+Alson XMD is a WhatsApp automation bot designed to provide useful commands, group tools, entertainment features and AI-powered functionality.
+
+It is designed to be simple enough to deploy from an Android phone using Termux.
+
+«⚠️ Use the bot responsibly and follow WhatsApp's Terms of Service. Avoid spam, bulk messaging and abusive automation.»
 
 ---
 
-📢 Official WhatsApp Channel
+📱 Requirements
 
-Join the official Alson-Bot channel for updates, announcements and new features:
+Before starting, make sure you have:
 
-👉 https://whatsapp.com/channel/0029Vb8pa9p5kg7CkpkxrR37
-
----
-
-📲 Installation
-
-1. Install Termux
-
-Download Termux from the official F-Droid source:
-
-https://f-droid.org/packages/com.termux/
-
-«⚠️ Avoid downloading Termux from random websites.»
+- 📱 Android phone
+- 🟢 Termux
+- 🌐 Internet connection
+- 🟢 WhatsApp account
+- 📦 Git
+- 🟢 Node.js
+- 🔑 Your bot pairing/login method
+- 💾 Enough storage
 
 ---
 
-2. Update Termux
+🚀 INSTALLATION — TERMUX
+
+1️⃣ Update Termux
 
 Open Termux and run:
 
@@ -63,196 +55,439 @@ pkg update && pkg upgrade -y
 
 ---
 
-3. Install Node.js and Git
+2️⃣ Install Required Packages
 
-pkg install nodejs git -y
+Run:
 
-Check that they installed correctly:
-
-node -v
-git --version
+pkg install git nodejs ffmpeg imagemagick python make clang -y
 
 ---
 
-📥 Download Alson-Bot
+3️⃣ Check Node.js
+
+Run:
+
+node -v
+
+You should see a Node.js version.
+
+Then check npm:
+
+npm -v
+
+---
+
+📥 4️⃣ Clone ALSON XMD
 
 Clone the repository:
 
 git clone https://github.com/alsonmachingauta06-lab/Alson-Bot.git
 
-Enter the bot folder:
+Enter the bot directory:
 
 cd Alson-Bot
 
-Install dependencies:
-
-npm install
-
 ---
 
-🔐 WhatsApp Pairing
-
-Start the bot:
-
-npm start
-
-or:
-
-node index.js
-
-The bot will provide a pairing code.
-
-On your WhatsApp:
-
-WhatsApp → Settings → Linked Devices → Link a Device → Link with phone number instead
-
-Enter the pairing code shown by Alson-Bot.
-
-After successful pairing, the bot will connect automatically.
-
----
-
-▶️ Start the Bot
-
-Whenever you want to start Alson-Bot:
-
-cd ~/Alson-Bot
-npm start
-
-If "npm start" isn't configured, use:
-
-node index.js
-
----
-
-💬 Chatbot
-
-Alson-Bot includes an AI chatbot.
-
-Simply send a normal message in a supported chat and the bot can respond automatically.
-
-Example:
-
-Hi
-
-Hey! 👋 How’s everyone doing?
-
----
-
-👥 Group Usage
-
-Add the bot to your WhatsApp group and use the supported commands.
-
-Some commands may require:
-
-- 👑 Owner permissions
-- 🛡️ Admin permissions
-- 👥 Group permissions
-
----
-
-👑 Owner
-
-Owner: Alson Machingauta
-
-Owner-only commands are protected and cannot be used by ordinary users.
-
----
-
-🖼️ Bot Profile Picture
-
-The owner can use the bot's profile-picture command where supported:
-
-setbotpp
-
-Follow the bot's instructions to set a new profile picture.
-
----
-
-🛠️ Troubleshooting
-
-Bot doesn't start
-
-Try:
-
-cd ~/Alson-Bot
-npm install
-node index.js
-
----
-
-Pairing code doesn't work
-
-Make sure:
-
-1. WhatsApp is connected to the internet.
-2. You enter the code quickly.
-3. WhatsApp is updated.
-4. You don't already have too many linked devices.
-5. The bot is running while you enter the code.
-
-You can also check your linked devices:
-
-WhatsApp → Settings → Linked Devices
-
----
-
-Dependencies are missing
+📦 5️⃣ Install Dependencies
 
 Run:
 
 npm install
 
-Then restart:
+If the project uses a lock file, you can also use:
+
+npm install --legacy-peer-deps
+
+---
+
+🖼️ 6️⃣ Bot Image
+
+The bot image is located inside:
+
+assets/bot_image.jpg
+
+Your project should look similar to:
+
+Alson-Bot/
+│
+├── assets/
+│   └── bot_image.jpg
+│
+├── commands/
+├── lib/
+├── index.js
+├── package.json
+└── README.md
+
+---
+
+🔐 7️⃣ CONFIGURATION
+
+Before starting the bot, check the configuration files included in the repository.
+
+If the project uses environment variables, create your ".env" file:
+
+nano .env
+
+Example:
+
+OWNER_NUMBER=263XXXXXXXXX
+OWNER_NAME=Alson Machingauta
+BOT_NAME=Alson XMD
+
+Save:
+
+CTRL + X
+Y
+ENTER
+
+«🔒 IMPORTANT: Never upload private API keys, session files, passwords or authentication credentials to GitHub.»
+
+---
+
+🔗 8️⃣ CONNECT ALSON XMD TO WHATSAPP
+
+Start the bot:
+
+node index.js
+
+If the bot provides a pairing-code option, follow the instructions displayed in Termux.
+
+Enter the pairing code in:
+
+WhatsApp → Linked Devices → Link a Device → Link with phone number
+
+After successful authentication, the bot should connect.
+
+---
+
+▶️ 9️⃣ START THE BOT
+
+Normal start:
+
+node index.js
+
+If your project contains a start script:
+
+npm start
+
+---
+
+♻️ KEEP THE BOT RUNNING
+
+For a simple Termux deployment, you can use:
+
+node index.js
+
+To keep Termux from sleeping:
+
+termux-wake-lock
+
+You can stop the bot with:
+
+CTRL + C
+
+---
+
+🤖 MINI BOT DEPLOYMENT
+
+Want to create a small WhatsApp bot instead of using the complete Alson XMD project?
+
+The basic deployment flow is:
+
+ANDROID
+   │
+   ▼
+TERMUX
+   │
+   ├── Node.js
+   ├── Git
+   └── Bot source
+   │
+   ▼
+npm install
+   │
+   ▼
+node index.js
+   │
+   ▼
+PAIR / LOGIN
+   │
+   ▼
+WHATSAPP
+   │
+   ▼
+🤖 MINI BOT ONLINE
+
+---
+
+🧩 MINI BOT — QUICK SETUP
+
+Create a project:
+
+mkdir mini-bot
+cd mini-bot
+
+Initialize Node.js:
+
+npm init -y
+
+Install the WhatsApp library used by the project:
+
+npm install @whiskeysockets/baileys
+
+Create the main file:
+
+nano index.js
+
+Paste your mini-bot code into "index.js".
+
+Save with:
+
+CTRL + X
+Y
+ENTER
+
+Then start it:
 
 node index.js
 
 ---
 
-🔒 Security
+🌐 DASHBOARD-STYLE DEPLOYMENT
 
-Never publish private credentials, session files, API keys, tokens, or passwords in this repository.
+If you want a deployment experience similar to a bot dashboard such as Jawaad-style dashboards, the general process is:
 
-Do NOT upload:
+┌─────────────────────────────┐
+│       🤖 MINI BOT           │
+├─────────────────────────────┤
+│                             │
+│  1. Create bot              │
+│  2. Enter bot name          │
+│  3. Install dependencies    │
+│  4. Start bot               │
+│  5. Pair WhatsApp           │
+│  6. Bot goes ONLINE         │
+│                             │
+└─────────────────────────────┘
+
+For a real dashboard, you need:
+
+- 🌐 Web dashboard
+- 🖥️ Backend/server
+- 🔐 Authentication
+- 📦 Bot deployment system
+- 📊 Bot status monitoring
+- 🔑 Secure session management
+- 🟢 Start/Stop controls
+- 📱 Pairing-code interface
+
+Do not put WhatsApp session credentials directly into a public GitHub repository.
+
+---
+
+🛠️ USEFUL COMMANDS
+
+Update packages
+
+pkg update && pkg upgrade -y
+
+Enter bot directory
+
+cd ~/Alson-Bot
+
+Install dependencies
+
+npm install
+
+Start bot
+
+node index.js
+
+Start with npm
+
+npm start
+
+Stop bot
+
+CTRL + C
+
+Check Node
+
+node -v
+
+Check npm
+
+npm -v
+
+Check Git
+
+git --version
+
+---
+
+🐞 TROUBLESHOOTING
+
+❌ "npm install" fails
+
+Try:
+
+npm install --legacy-peer-deps
+
+---
+
+❌ "node: command not found"
+
+Install Node.js:
+
+pkg install nodejs -y
+
+Then:
+
+node -v
+
+---
+
+❌ "git: command not found"
+
+Install Git:
+
+pkg install git -y
+
+---
+
+❌ Bot does not start
+
+Make sure you are inside the bot directory:
+
+cd ~/Alson-Bot
+
+Then:
+
+npm install
+
+And:
+
+node index.js
+
+---
+
+❌ Pairing does not work
+
+Make sure:
+
+- 📱 WhatsApp is installed
+- 🌐 Internet is working
+- 🔢 The number is entered correctly
+- 🔗 WhatsApp Linked Devices is available
+- ⏱️ You enter the pairing code before it expires
+- 📦 Dependencies are installed
+
+If the problem continues, restart the bot:
+
+CTRL + C
+node index.js
+
+---
+
+🔒 SECURITY
+
+NEVER upload these to GitHub:
 
 .env
-auth_info/
 session/
+auth_info/
 creds.json
-config.json
+API KEYS
+PASSWORDS
+PRIVATE TOKENS
 
-if they contain private credentials.
+Add sensitive files to ".gitignore".
 
-If you accidentally expose a secret, revoke it and generate a new one.
+Example:
 
----
-
-⚠️ Disclaimer
-
-Alson-Bot is provided for educational and personal automation purposes.
-
-Use the bot responsibly and follow WhatsApp's Terms of Service.
-
-The developer is not responsible for misuse of the bot or for accounts restricted because of user activity.
+.env
+session/
+auth_info/
+creds.json
+node_modules/
 
 ---
 
-❤️ Credits
+⭐ SUPPORT ALSON XMD
 
-Alson-Bot
+If you like the project:
 
-Developed and maintained by:
+⭐ Star the repository
 
-Alson Machingauta
+🍴 Fork the repository
 
-📢 Official WhatsApp Channel:
+📢 Join the WhatsApp Channel
 
-https://whatsapp.com/channel/0029Vb8pa9p5kg7CkpkxrR37
+🐞 Report bugs
+
+💡 Suggest improvements
 
 ---
 
-⭐ Support
+📢 OFFICIAL WHATSAPP CHANNEL
 
-If you like Alson-Bot, consider giving the repository a ⭐ on GitHub and joining the WhatsApp channel for updates.
+<div align="center"><a href="https://whatsapp.com/channel/0029Vb8pa9p5kg7CkpkxrR37"><img src="https://img.shields.io/badge/WHATSAPP%20CHANNEL-25D366?style=for-the-badge&logo=whatsapp&logoColor=white"></a>🔥 ALSON XMD COMMUNITY
 
-Powered by Alson Machingauta
+Updates • Features • Fixes • Announcements
+
+</div>---
+
+👑 CREDITS
+
+🤖 Alson XMD
+
+Developer: Alson Machingauta
+
+Bot: Alson XMD
+
+Repository: Alson-Bot
+
+Community: Alson XMD WhatsApp Channel
+
+---
+
+❤️ SPECIAL THANKS
+
+Thanks to the open-source community and developers who make WhatsApp automation projects possible.
+
+This project may use open-source libraries. Please respect their respective licenses and attribution requirements.
+
+---
+
+⚠️ DISCLAIMER
+
+Alson XMD is provided for educational and automation purposes.
+
+The developer is not responsible for:
+
+- Account bans
+- Misuse of the bot
+- Spam
+- Unauthorized automation
+- Loss of WhatsApp accounts
+- Third-party service issues
+
+Use responsibly.
+
+---
+
+<div align="center">⚡ ALSON XMD ⚡
+
+🤖 Your WhatsApp. Your Automation.
+
+Made with ❤️ by Alson Machingauta
+
+📢 Join the official WhatsApp Channel
+
+<a href="https://whatsapp.com/channel/0029Vb8pa9p5kg7CkpkxrR37"><img src="https://img.shields.io/badge/💚%20JOIN%20NOW-WhatsApp-25D366?style=for-the-badge&logo=whatsapp"></a><br><br>
+
+© 2026 Alson XMD — All Rights Reserved
+
+</div>
