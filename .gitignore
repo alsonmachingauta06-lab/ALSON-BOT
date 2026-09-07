@@ -1,10 +1,9 @@
 node_modules/
 session/
-baileys_store.json
-.env
-*.log
 tmp/
 temp/
 downloads/
-auth_info/
-sessions/
+*.log
+.env
+.env.*
+baileys_store.json
