@@ -1,0 +1,139 @@
+const isOwnerOrSudo = require('../lib/isOwner');
+
+async function toGroupStatus(sock, chatId, message) {
+    try {
+        // Only groups
+        if (!chatId.endsWith('@g.us')) {
+            await sock.sendMessage(
+                chatId,
+                { text: '❌ This command can only be used inside a group.' },
+                { quoted: message }
+            );
+            return;
+        }
+
+        // Owner only
+        const senderId = message.key.participant || message.key.remoteJid;
+        const owner = await isOwnerOrSudo(senderId, sock, chatId);
+
+        if (!message.key.fromMe && !owner) {
+            await sock.sendMessage(
+                chatId,
+                { text: '❌ Only the owner can use .togroupstatus' },
+                { quoted: message }
+            );
+            return;
+        }
+
+        // Handle text caption extraction across different incoming configurations
+        const text =
+            message.message?.conversation ||
+            message.message?.extendedTextMessage?.text ||
+            message.message?.imageMessage?.caption ||
+            message.message?.videoMessage?.caption ||
+            '';
+
+        const args = text.trim().split(/\s+/);
+        args.shift();
+        const statusText = args.join(' ').trim();
+
+        // Detect quoted references or direct attachments
+        const quotedMessage = message.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        
+        const isImage = message.message?.imageMessage || quotedMessage?.imageMessage;
+        const isVideo = message.message?.videoMessage || quotedMessage?.videoMessage;
+
+        const targetImageMessage = message.message?.imageMessage || quotedMessage?.imageMessage;
+        const targetVideoMessage = message.message?.videoMessage || quotedMessage?.videoMessage;
+
+        // Get group name
+        let groupName = 'Group';
+        try {
+            const metadata = await sock.groupMetadata(chatId);
+            groupName = metadata?.subject || 'Group';
+        } catch {}
+
+        if (isImage) {
+            // Post Image Group Status
+            await sock.relayMessage(
+                chatId,
+                {
+                    groupStatus: {
+                        message: {
+                            imageMessage: {
+                                ...targetImageMessage,
+                                caption: statusText || undefined
+                            }
+                        }
+                    }
+                },
+                {}
+            );
+        } else if (isVideo) {
+            // Post Video Group Status
+            await sock.relayMessage(
+                chatId,
+                {
+                    groupStatus: {
+                        message: {
+                            videoMessage: {
+                                ...targetVideoMessage,
+                                caption: statusText || undefined
+                            }
+                        }
+                    }
+                },
+                {}
+            );
+        } else {
+            // Fallback to text status if no media is found
+            if (!statusText) {
+                await sock.sendMessage(
+                    chatId,
+                    {
+                        text:
+                            '📱 *TO GROUP STATUS*\n\n' +
+                            'Usage:\n' +
+                            '• Reply to an image/video with: `.togroupstatus [caption]`\n' +
+                            '• Upload media directly with: `.togroupstatus [caption]`\n' +
+                            '• Send standard text with: `.togroupstatus Your status text`'
+                    },
+                    { quoted: message }
+                );
+                return;
+            }
+
+            await sock.relayMessage(
+                chatId,
+                {
+                    groupStatus: {
+                        message: {
+                            conversation: statusText
+                        }
+                    }
+                },
+                {}
+            );
+        }
+
+        await sock.sendMessage(
+            chatId,
+            { text: `✅ *Group Status posted successfully!*` },
+            { quoted: message }
+        );
+
+        console.log(`✅ Group status posted: ${groupName}`);
+
+    } catch (error) {
+        console.error('❌ togroupstatus error:', error);
+        await sock.sendMessage(
+            chatId,
+            {
+                text: '❌ Failed to post the group status.\n\nEnsure the bot has active Admin privileges in this group chat.'
+            },
+            { quoted: message }
+        ).catch(() => {});
+    }
+}
+
+module.exports = toGroupStatus;

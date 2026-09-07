@@ -1,0 +1,7 @@
+{
+  "enabled": false,
+  "mode": "block",
+  "warnLimit": 3,
+  "blockedCountries": [],
+  "_hash": "{\"enabled\":false,\"mode\":\"block\",\"warnLimit\":3,\"blockedCountries\":[]}"
+}

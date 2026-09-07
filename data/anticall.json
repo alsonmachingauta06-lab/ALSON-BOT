@@ -1,0 +1,8 @@
+{
+  "enabled": false,
+  "mode": "decline",
+  "warnLimit": 3,
+  "message": "╭──❍「 *CALL DETECTED* 」❍\n├• 👋 Hello @{caller}\n├• 📞 Your call was auto-declined\n├• 💬 Please send a text message\n├• 🤖 I'll respond when available\n╰───★─☆─♪♪─❍\n\n╭──❍「 *Alson XMD* 」❍\n╰───★─☆─♪♪─❍",
+  "_version": "1.0.0",
+  "_hash": "{\"enabled\":false,\"mode\":\"decline\",\"warnLimit\":3,\"message\":\"╭──❍「 *CALL DETECTED* 」❍\\n├• 👋 Hello @{caller}\\n├• 📞 Your call was auto-declined\\n├• 💬 Please send a text message\\n├• 🤖 I'll respond when available\\n╰───★─☆─♪♪─❍\\n\\n╭──❍「 *Alson XMD* 」❍\\n╰───★─☆─♪♪─❍\"}"
+}

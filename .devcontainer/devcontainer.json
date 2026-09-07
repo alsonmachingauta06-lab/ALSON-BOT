@@ -1,0 +1,5 @@
+{
+  "name": "Alson XMD",
+  "image": "node:latest",
+  "postCreateCommand": "npm install"
+}

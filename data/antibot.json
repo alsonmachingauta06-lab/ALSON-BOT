@@ -1,0 +1,10 @@
+{
+  "detectedBots": [],
+  "suspiciousActivities": {},
+  "enabled": true,
+  "autoAction": "warn",
+  "protectedGroups": [
+    "120363430003910120@g.us",
+    "120363405311878895@g.us"
+  ]
+}
