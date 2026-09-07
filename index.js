@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
 
 const log = (...args) =>
     process.stderr.write(
@@ -308,6 +309,29 @@ function stopHeartbeat() {
 }
 
 /*
+/*
+|--------------------------------------------------------------------------
+| RENDER WEB SERVER
+|--------------------------------------------------------------------------
+*/
+
+const PORT = process.env.PORT || 10000;
+
+const server = http.createServer((req, res) => {
+    res.writeHead(200, {
+        'Content-Type': 'text/plain'
+    });
+
+    res.end('ALSON XMD is running!');
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+    log(
+        c.green +
+        `🌐 Render server listening on port ${PORT}` +
+        c.reset
+    );
+});
 |--------------------------------------------------------------------------
 | START BOT
 |--------------------------------------------------------------------------
