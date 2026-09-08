@@ -69,6 +69,17 @@ async function chatbotCommand(sock, chatId, message) {
 
         const data = loadChatbotData();
 
+        console.log('🔎 CHATBOT DATA:', JSON.stringify(data));
+
+        const isGroup = chatId.endsWith('@g.us');
+
+        console.log('🔎 CHAT ID:', chatId);
+        console.log('🔎 IS GROUP:', isGroup);
+        console.log('🔎 DMS ENABLED:', data.dms);
+        console.log('🔎 GROUPS ENABLED:', data.groups);
+        console.log('🔎 STATUS ENABLED:', data.status);
+        console.log('🔎 CHAT SETTING:', data.chats?.[chatId]);
+
         if (!isOwner) {
             return reply(
                 sock,
@@ -257,7 +268,6 @@ async function chatbotCommand(sock, chatId, message) {
             );
         }
 
-        const isGroup = chatId.endsWith('@g.us');
         const chatStatus = data.chats[chatId];
 
         const currentStatus =
