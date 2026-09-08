@@ -320,7 +320,7 @@ async function handleChatbotResponse(
         const data = loadChatbotData();
         const isGroup = chatId.endsWith('@g.us');
 
-        console.log('🤖 CHATBOT HANDLER');
+        console.log('🔥🔥🔥 ALSON CHATBOT FILE IS RUNNING 🔥🔥🔥');
         console.log('├ chatId:', chatId);
         console.log('├ userMessage:', userMessage);
         console.log('├ isGroup:', isGroup);
