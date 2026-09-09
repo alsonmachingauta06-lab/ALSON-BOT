@@ -25,6 +25,7 @@ function runYtDlp(args) {
 }
 
 async function playCommand(sock, chatId, message) {
+  console.log('🎵 PLAY HANDLER ENTERED');
     let outputFile = null;
 
     try {
