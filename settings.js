@@ -1,22 +1,4 @@
-//════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════//
-//                                                                                                                                                                                        //
-//                                                             𝐖𝐀𝐋𝐋𝐘𝐉𝐀𝐘𝐓𝐄𝐂𝐇-𝐌𝐃 𝐁𝐎𝐓                                                                                                     //
-//                                                                                                                                                                                        //
-//                                                                  𝐕 : 1.0.0                                                                                                             //
-//                                                                                                                                                                                        //
-//                                                                                                                                                                                        //
-//                ██╗    ██╗ █████╗ ██╗     ██╗  ██╗   ██╗   ██╗ █████╗ ██╗   ██╗████████╗███████╗ ██████╗██╗  ██╗      ███╗   ███╗██████╗                                 //
-//                ██║    ██║██╔══██╗██║     ██║  ╚██╗ ██╔╝   ██║██╔══██╗╚██╗ ██╔╝╚══██╔══╝██╔════╝██╔════╝██║  ██║      ████╗ ████║██╔══██╗                              //
-//                ██║ █╗ ██║███████║██║     ██║   ╚████╔╝    ██║███████║ ╚████╔╝    ██║   █████╗  ██║     ███████║█████╗██╔████╔██║██║  ██║                               //
-//                ██║███╗██║██╔══██║██║     ██║    ╚██╔╝██   ██║██╔══██║  ╚██╔╝     ██║   ██╔══╝  ██║     ██╔══██║╚════╝██║╚██╔╝██║██║  ██║                               //
-//                ╚███╔███╔╝██║  ██║███████╗███████╗██║ ╚█████╔╝██║  ██║   ██║      ██║   ███████╗╚██████╗██║  ██║      ██║ ╚═╝ ██║██████╔╝                              //
-//                 ╚══╝╚══╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚════╝ ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚══════╝ ╚═════╝╚═╝  ╚═╝      ╚═╝     ╚═╝╚═════╝                                 //
-//                                                                                                                                                                                        //
-//                                                                 𝐂𝐎𝐏𝐘𝐑𝐈𝐆𝐇𝐓 2025                                                                                                        //
-//                                                                                                                                                                                        //
-//                                                                                                                                                                                        //
-//════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════//
-//* 
+
 //  * project_name : Alson XMD
 //  * author : AlsonMachingauta
 //  * youtube : https://www.youtube.com/AlsonMachingautay
@@ -29,8 +11,8 @@
 //GitHub: AlsonMachingautah
 //WhatsApp: +263786359833
 //want more free bot scripts? subscribe to my youtube channel: https://youtube.com/@AlsonMachingautay
-//   * Created By Github: AlsonMachingautah.
-//   * Credit To ally jay tech
+//   * Created By Github: alsonmachingauta06-lab.
+//   * Credit To alson machingauta 
 //   * © 2025 Alson XMD.
 // ⛥┌┤
 // */
@@ -99,7 +81,7 @@ const settings = {
   // ========== BOT CONFIGURATION ==========
   timezone: 'Africa/Harare',
   prefix: '.',
-  ownerNumber: '263786359833',
+  ownerNumber: '263783549857',
   commandMode: "private",
   
 // ========== API KEYS ==========
@@ -110,7 +92,7 @@ pollinationsKey: process.env.POLLINATIONS_API_KEY || '',
   storeWriteInterval: 10000,
   
   // ========== UPDATE SETTINGS ==========
-  updateZipUrl: "https://github.com/AlsonMachingautah/Alson XMD/archive/refs/heads/main.zip",
+  updateZipUrl: "https://github.com/alsonmachingauta06-lab/ALSON-BOT/archive/refs/heads/main.zip",
 };
 
 module.exports = settings;
