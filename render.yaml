@@ -3,7 +3,7 @@ services:
     name: alson-xmd
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: npm install && pip install yt-dlp 
     startCommand: npm start
     envVars:
       - key: NODE_ENV
