@@ -92,7 +92,7 @@ const settings = require('./settings');
 global.botname = 'Alson XMD';
 global.themeemoji = '🤖';
 
-const phoneNumber = '263783549857';
+const phoneNumber = '263774265522';
 
 
 const storeWriteInterval =
