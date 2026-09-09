@@ -36,6 +36,11 @@ global.File = class File {};
 require('./settings');
 require('dotenv').config();
 
+console.log(
+  '🔑 POLLINATIONS KEY:',
+  process.env.POLLINATIONS_API_KEY ? 'LOADED ✅' : 'MISSING ❌'
+);
+
 const {
     handleMessages,
     handleGroupParticipantUpdate
@@ -1227,6 +1232,7 @@ async function shutdown() {
     } catch (e) {}
 
     
+
     
 
     try {
