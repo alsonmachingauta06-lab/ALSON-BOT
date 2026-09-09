@@ -1,5 +1,5 @@
 const yts = require('yt-search');
-const { execFile } = require('child_process');
+const youtubedl = require('youtube-dl-exec');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,23 +9,9 @@ if (!fs.existsSync(DOWNLOAD_DIR)) {
     fs.mkdirSync(DOWNLOAD_DIR, { recursive: true });
 }
 
-function runYtDlp(args) {
-    return new Promise((resolve, reject) => {
-        execFile('yt-dlp', args, {
-            maxBuffer: 10 * 1024 * 1024
-        }, (error, stdout, stderr) => {
-            if (error) {
-                reject(new Error(stderr || error.message));
-                return;
-            }
-
-            resolve(stdout.trim());
-        });
-    });
-}
-
 async function playCommand(sock, chatId, message) {
-  console.log('🎵 PLAY HANDLER ENTERED');
+    console.log('🎵 PLAY HANDLER ENTERED');
+
     let outputFile = null;
 
     try {
@@ -44,7 +30,9 @@ async function playCommand(sock, chatId, message) {
             return await sock.sendMessage(
                 chatId,
                 {
-                    text: '🎵 *What song do you want to download?*\n\nExample:\n.play Faded Alan Walker'
+                    text:
+                        '🎵 *What song do you want to download?*\n\n' +
+                        'Example:\n.play Faded Alan Walker'
                 },
                 { quoted: message }
             );
@@ -92,21 +80,16 @@ async function playCommand(sock, chatId, message) {
             `${safeName}.%(ext)s`
         );
 
-        await runYtDlp([
-            '--no-playlist',
-            '--no-warnings',
-            '--quiet',
-            '-f',
-            'bestaudio[ext=m4a]/bestaudio',
-            '--extract-audio',
-            '--audio-format',
-            'mp3',
-            '--audio-quality',
-            '5',
-            '-o',
-            outputTemplate,
-            video.url
-        ]);
+        await youtubedl(video.url, {
+            noPlaylist: true,
+            noWarnings: true,
+            quiet: true,
+            format: 'bestaudio',
+            extractAudio: true,
+            audioFormat: 'mp3',
+            audioQuality: '5',
+            output: outputTemplate
+        });
 
         const files = fs.readdirSync(DOWNLOAD_DIR);
 
@@ -115,7 +98,9 @@ async function playCommand(sock, chatId, message) {
         );
 
         if (!downloaded) {
-            throw new Error('yt-dlp completed but no output file was found.');
+            throw new Error(
+                'yt-dlp completed but no output file was found.'
+            );
         }
 
         outputFile = path.join(DOWNLOAD_DIR, downloaded);
@@ -131,7 +116,8 @@ async function playCommand(sock, chatId, message) {
             {
                 audio: fs.readFileSync(outputFile),
                 mimetype: 'audio/mpeg',
-                fileName: `${video.title.replace(/[\\/:*?"<>|]/g, '_')}.mp3`
+                fileName:
+                    `${video.title.replace(/[\\/:*?"<>|]/g, '_')}.mp3`
             },
             { quoted: message }
         );
@@ -156,7 +142,10 @@ async function playCommand(sock, chatId, message) {
             try {
                 fs.unlinkSync(outputFile);
             } catch (e) {
-                console.error('Cleanup error:', e.message);
+                console.error(
+                    'Cleanup error:',
+                    e.message
+                );
             }
         }
     }
