@@ -1592,9 +1592,12 @@ case userMessage.startsWith('.setgpp'):
             case userMessage.startsWith('.spotify'):
                 await spotifyCommand(sock, chatId, message);
                 break;
-            case userMessage.startsWith('.play'):
-                await playCommand(sock, chatId, message);
-                break;
+             case userMessage.startsWith('.play'):
+    await playCommand(sock, chatId, message);
+    commandExecuted = true;
+    break;
+         
+    
             case userMessage.startsWith('.mp3'):
                 await playCommand(sock, chatId, message);
                 break;
