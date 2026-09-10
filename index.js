@@ -278,7 +278,49 @@ function stopHeartbeat() {
 
 const PORT = process.env.PORT || 10000;
 
+const META_VERIFY_TOKEN = process.env.META_VERIFY_TOKEN || '';
+
 const server = http.createServer((req, res) => {
+    if (req.method === 'GET' && req.url.startsWith('/webhook')) {
+        const url = new URL(req.url, `http://${req.headers.host}`);
+        const mode = url.searchParams.get('hub.mode');
+        const token = url.searchParams.get('hub.verify_token');
+        const challenge = url.searchParams.get('hub.challenge');
+
+        if (mode === 'subscribe' && token === META_VERIFY_TOKEN) {
+            log('✅ Meta webhook verified');
+            res.writeHead(200, { 'Content-Type': 'text/plain' });
+            return res.end(challenge || '');
+        }
+
+        log('❌ Meta webhook verification failed');
+        res.writeHead(403, { 'Content-Type': 'text/plain' });
+        return res.end('Forbidden');
+    }
+
+    if (req.method === 'POST' && req.url === '/webhook') {
+        let body = '';
+
+        req.on('data', chunk => {
+            body += chunk;
+        });
+
+        req.on('end', () => {
+            log('📩 Meta webhook received');
+
+            try {
+                log('META WEBHOOK:', JSON.parse(body));
+            } catch (error) {
+                log('Meta webhook body:', body);
+            }
+
+            res.writeHead(200, { 'Content-Type': 'text/plain' });
+            res.end('EVENT_RECEIVED');
+        });
+
+        return;
+    }
+
     res.writeHead(200, {
         'Content-Type': 'text/plain'
     });
