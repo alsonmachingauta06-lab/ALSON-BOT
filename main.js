@@ -1592,19 +1592,20 @@ case userMessage.startsWith('.setgpp'):
             case userMessage.startsWith('.spotify'):
                 await spotifyCommand(sock, chatId, message);
                 break;
-        case userMessage.startsWith('.play'):
+
+       case userMessage.startsWith('.play'):
     await playCommand(sock, chatId, message);
     commandExecuted = true;
     break;
-           
-    
-            case userMessage.startsWith('.mp3'):
-                await playCommand(sock, chatId, message);
-                break;
-            case userMessage.startsWith('.ytmp3'):
-                await playCommand(sock, chatId, message);
-                break;
-            case userMessage.startsWith('.song'):
+
+case userMessage.startsWith('.mp3'):
+    await playCommand(sock, chatId, message);
+    break;
+
+case userMessage.startsWith('.ytmp3'):
+    await playCommand(sock, chatId, message);
+    break; 
+    case usermessage.startsWith('.song'):
                 await songCommand(sock, chatId, message);
                 break;
             case userMessage.startsWith('.video') || userMessage.startsWith('.ytmp4'):
