@@ -325,6 +325,55 @@ const server = http.createServer((req, res) => {
         'Content-Type': 'text/plain'
     });
 
+    if (req.method === 'GET' && req.url === '/meta-test') {
+        const https = require('https');
+        const phoneId = process.env.META_PHONE_NUMBER_ID;
+        const token = process.env.META_ACCESS_TOKEN;
+
+        if (!phoneId || !token) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({
+                ok: false,
+                error: 'Meta environment variables are missing'
+            }));
+        }
+
+        const options = {
+            hostname: 'graph.facebook.com',
+            path: `/v23.0/${phoneId}`,
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        const request = https.request(options, response => {
+            let data = '';
+
+            response.on('data', chunk => {
+                data += chunk;
+            });
+
+            response.on('end', () => {
+                res.writeHead(response.statusCode || 500, {
+                    'Content-Type': 'application/json'
+                });
+                res.end(data);
+            });
+        });
+
+        request.on('error', error => {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({
+                ok: false,
+                error: error.message
+            }));
+        });
+
+        request.end();
+        return;
+    }
+
     res.end('ALSON XMD is running!');
 });
 
