@@ -507,9 +507,14 @@ try {
 }
 
 // If we get here, it's a command
-const rawText = commandWithoutPrefix;
-const resolvedCommand = resolveCommand(rawText);
-const args = rawText.replace(/^[^\s]*\s?/, '');
+const rawText = commandWithoutPrefix.trim();
+
+const firstWord = rawText.split(/\s+/)[0].toLowerCase();
+const restArgs = rawText.split(/\s+/).slice(1).join(' ').trim();
+
+const resolvedCommand = resolveCommand(firstWord);
+const args = restArgs;
+
 const userMessage = '.' + resolvedCommand + (args ? ' ' + args : '');
 
 // 🔥 COMMAND DEBUG
