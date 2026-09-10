@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
+const { handleMetaMessage } = require('./meta-chatbot');
 
 const log = (...args) =>
     process.stderr.write(
@@ -305,13 +306,37 @@ const server = http.createServer((req, res) => {
             body += chunk;
         });
 
-        req.on('end', () => {
+        req.on('end', async () => {
             log('📩 Meta webhook received');
 
             try {
-                log('META WEBHOOK:', JSON.parse(body));
+                const data = JSON.parse(body);
+                log('META WEBHOOK:', data);
+
+                const message =
+                    data.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+
+                if (
+                    message &&
+                    message.type === 'text' &&
+                    message.from &&
+                    message.text?.body
+                ) {
+                    const from = message.from;
+                    const text = message.text.body.trim();
+
+                    log('🤖 META CHATBOT MESSAGE:', from, text);
+
+                    handleMetaMessage(from, text)
+                        .then(reply => {
+                            log('🤖 META CHATBOT REPLY:', reply);
+                        })
+                        .catch(error => {
+                            log('❌ META CHATBOT ERROR:', error.message);
+                        });
+                }
             } catch (error) {
-                log('Meta webhook body:', body);
+                log('❌ Meta webhook JSON error:', error.message);
             }
 
             res.writeHead(200, { 'Content-Type': 'text/plain' });
