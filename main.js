@@ -263,8 +263,8 @@ function resolveCommand(input) {
 // Global settings
 global.packname = settings.packname;
 global.author = settings.author;
-global.channelLink = "https://whatsapp.com/channel/0029Vb64CFeHFxP6SQN1VY0I";
-global.ytch = settings.ytChannel || "WALLY JAY TECH";
+global.channelLink = "https://whatsapp.com/channel/0029Vb8pa9p5kg7CkpkxrR37";
+global.ytch = settings.ytChannel || "Alson XMD ";
 
 // ADD PLATFORM DETECTION HERE
 function getDeploymentPlatform() {
