@@ -321,10 +321,6 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    res.writeHead(200, {
-        'Content-Type': 'text/plain'
-    });
-
     if (req.method === 'GET' && req.url === '/meta-test') {
         const https = require('https');
         const phoneId = process.env.META_PHONE_NUMBER_ID;
