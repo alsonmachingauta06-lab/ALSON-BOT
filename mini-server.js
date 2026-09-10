@@ -22,6 +22,44 @@ app.use(express.json({
 
 const PORT = process.env.PORT || 3000;
 
+/* --------------------------------------------------------------------------
+   META WHATSAPP CLOUD API WEBHOOK
+   -------------------------------------------------------------------------- */
+
+const META_VERIFY_TOKEN = process.env.META_VERIFY_TOKEN || '';
+
+app.get('/webhook', (req, res) => {
+    const mode = req.query['hub.mode'];
+    const token = req.query['hub.verify_token'];
+    const challenge = req.query['hub.challenge'];
+
+    if (mode === 'subscribe' && token === META_VERIFY_TOKEN) {
+        console.log('✅ Meta webhook verified');
+        return res.status(200).send(challenge);
+    }
+
+    console.log('❌ Meta webhook verification failed');
+    return res.sendStatus(403);
+});
+
+app.post('/webhook', (req, res) => {
+    console.log('📩 Meta webhook received');
+
+    // Acknowledge Meta immediately.
+    res.sendStatus(200);
+
+    try {
+        console.log(
+            'META WEBHOOK:',
+            JSON.stringify(req.body, null, 2)
+        );
+    } catch (error) {
+        console.error('Meta webhook logging error:', error);
+    }
+});
+
+
+
 const SESSION_ROOT =
     path.join(__dirname, 'mini-sessions');
 
