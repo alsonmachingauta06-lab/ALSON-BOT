@@ -66,10 +66,10 @@
 
 const settings = {
   // ========== BOT INFORMATION ==========
-  packname: 'Alson XMD',
-  author: '‎Alson Machingauta',
-  botName: "Alson XMD",
-  botOwner: 'Alson Machingauta',
+  packname: 'Elson XMD',
+  author: '‎Elson Machingauta',
+  botName: "Elson XMD",
+  botOwner: 'Elson Machingauta',
   description: "Alson XMD ,A Multi-Device whatsapp user bot",
   version: "1.0.0",
   
@@ -81,7 +81,7 @@ const settings = {
   // ========== BOT CONFIGURATION ==========
   timezone: 'Africa/Harare',
   prefix: '.',
-  ownerNumber: '263783549857',
+  ownerNumber: '263774265522',
   commandMode: "private",
   
 // ========== API KEYS ==========
