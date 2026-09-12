@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const { handleMetaMessage } = require('./meta-chatbot');
+const { handleYCloudMessage } = require('./ycloud-chatbot');
 
 const log = (...args) =>
     process.stderr.write(
@@ -333,6 +334,28 @@ const server = http.createServer((req, res) => {
                         })
                         .catch(error => {
                             log('❌ META CHATBOT ERROR:', error.message);
+                        });
+                }
+
+                const ycloudMessage = data.whatsappInboundMessage;
+
+                if (
+                    ycloudMessage &&
+                    ycloudMessage.from &&
+                    ycloudMessage.type === 'text' &&
+                    ycloudMessage.text?.body
+                ) {
+                    const from = ycloudMessage.from;
+                    const text = ycloudMessage.text.body.trim();
+
+                    log('☁️ YCLOUD CHATBOT MESSAGE:', from, text);
+
+                    handleYCloudMessage(from, text)
+                        .then(reply => {
+                            log('☁️ YCLOUD CHATBOT REPLY:', reply);
+                        })
+                        .catch(error => {
+                            log('❌ YCLOUD CHATBOT ERROR:', error.message);
                         });
                 }
             } catch (error) {
