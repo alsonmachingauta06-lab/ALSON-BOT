@@ -360,6 +360,19 @@ const server = http.createServer((req, res) => {
                         text
                     );
 
+                    if (groupId) {
+                        log(
+                            '👥 YCLOUD GROUP MESSAGE:',
+                            JSON.stringify({
+                                groupId,
+                                from,
+                                senderName,
+                                messageId,
+                                text
+                            })
+                        );
+                    }
+
                     handleYCloudMessage({
                         from,
                         text,

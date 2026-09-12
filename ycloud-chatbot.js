@@ -263,7 +263,30 @@ function ownerReply() {
 }
 
 function isMusicRequest(text) {
-    return /^(play|song|music)\b/i.test(text.trim());
+    const lower = text.trim().toLowerCase();
+
+    return (
+        /^(play|song|music)\b/i.test(lower) ||
+        /\b(play|find|get|download|send)\s+(me\s+)?(the\s+)?(song|track|audio|music)\b/i.test(lower) ||
+        /\b(song|track|audio|music)\s+(called|named)\b/i.test(lower) ||
+        /\b(audio|song|track)\s+of\b/i.test(lower) ||
+        /\b(send|give)\s+me\s+(the\s+)?(song|audio|track)\b/i.test(lower)
+    );
+}
+
+function extractMusicQuery(text) {
+    let query = text.trim();
+
+    query = query
+        .replace(/^play\s+/i, '')
+        .replace(/^song\s+/i, '')
+        .replace(/^music\s+/i, '')
+        .replace(/^.*?\b(?:song|track|audio|music)\s+(?:called|named)\s+/i, '')
+        .replace(/^.*?\b(?:audio|song|track)\s+of\s+/i, '')
+        .replace(/^.*?\b(?:play|find|get|download|send)\s+(?:me\s+)?(?:the\s+)?(?:song|track|audio|music)\s+/i, '')
+        .trim();
+
+    return query;
 }
 
 async function handleYCloudMessage({
@@ -312,9 +335,7 @@ async function handleYCloudMessage({
      * MUSIC
      */
     if (isMusicRequest(cleanText)) {
-        const query = cleanText
-            .replace(/^(play|song|music)\b/i, '')
-            .trim();
+        const query = extractMusicQuery(cleanText);
 
         if (!query) {
             const reply =
