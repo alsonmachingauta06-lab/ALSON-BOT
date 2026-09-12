@@ -171,15 +171,16 @@ async function handleYCloudMessage(from, text) {
         }
 
         try {
-            const track = await handleMusicRequest(from, query);
+            const result = await handleMusicRequest(from, query);
 
-            if (!track) {
+            if (!result.ok) {
+                await sendYCloudMessage(from, result.message);
                 return;
             }
 
             await sendYCloudMessage(
                 from,
-                `🎵 *${track.title}*\n👤 ${track.artist}`
+                `🎵 *${result.title}*\n👤 ${result.artist}`
             );
 
             return;

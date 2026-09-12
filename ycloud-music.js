@@ -147,13 +147,10 @@ async function handleMusicRequest(to, query) {
     const tracks = await searchMusic(query);
 
     if (!tracks.length) {
-        await require('./ycloud-chatbot')
-            .sendYCloudMessage(
-                to,
-                `🎵 I couldn't find a downloadable track for "${query}".`
-            );
-
-        return;
+        return {
+            ok: false,
+            message: `🎵 I couldn't find a downloadable track for "${query}".`
+        };
     }
 
     const ranked = tracks
@@ -165,15 +162,12 @@ async function handleMusicRequest(to, query) {
 
     const best = ranked[0];
 
-    // Reject weak/unrelated matches.
+    // Reject weak or unrelated matches.
     if (!best || best.score < 0.5) {
-        await require('./ycloud-chatbot')
-            .sendYCloudMessage(
-                to,
-                `🎵 I couldn't find a good downloadable match for "${query}".`
-            );
-
-        return;
+        return {
+            ok: false,
+            message: `🎵 I couldn't find a good downloadable match for "${query}".`
+        };
     }
 
     const track = best.track;
@@ -181,6 +175,7 @@ async function handleMusicRequest(to, query) {
     await sendYCloudAudio(to, track.audiodownload);
 
     return {
+        ok: true,
         title: track.name,
         artist: track.artist_name
     };
