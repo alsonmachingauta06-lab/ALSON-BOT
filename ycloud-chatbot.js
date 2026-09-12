@@ -1,6 +1,7 @@
 const https = require('https');
 
 const YCLOUD_API_KEY = process.env.YCLOUD_API_KEY;
+const POLLINATIONS_API_KEY = process.env.POLLINATIONS_API_KEY;
 const BUSINESS_PHONE = process.env.YCLOUD_BUSINESS_PHONE || '263783549857';
 
 const conversations = new Map();
@@ -27,6 +28,7 @@ function callAI(userMessage, history = []) {
             path: '/v1/chat/completions',
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${POLLINATIONS_API_KEY}`,
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(payload)
             }
