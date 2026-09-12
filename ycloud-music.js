@@ -114,6 +114,34 @@ async function sendYCloudAudio(to, audioUrl) {
     });
 }
 
+function normalizeText(text) {
+    return String(text || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[0300-036f]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function scoreTrack(track, query) {
+    const wanted = normalizeText(query).split(' ').filter(Boolean);
+    const title = normalizeText(track.name);
+    const artist = normalizeText(track.artist_name);
+    const combined = `${title} ${artist}`;
+
+    if (!wanted.length) return 0;
+
+    let matches = 0;
+
+    for (const word of wanted) {
+        if (combined.split(' ').includes(word)) {
+            matches++;
+        }
+    }
+
+    return matches / wanted.length;
+}
+
 async function handleMusicRequest(to, query) {
     const tracks = await searchMusic(query);
 
@@ -127,7 +155,27 @@ async function handleMusicRequest(to, query) {
         return;
     }
 
-    const track = tracks[0];
+    const ranked = tracks
+        .map(track => ({
+            track,
+            score: scoreTrack(track, query)
+        }))
+        .sort((a, b) => b.score - a.score);
+
+    const best = ranked[0];
+
+    // Reject weak/unrelated matches.
+    if (!best || best.score < 0.5) {
+        await require('./ycloud-chatbot')
+            .sendYCloudMessage(
+                to,
+                `🎵 I couldn't find a good downloadable match for "${query}".`
+            );
+
+        return;
+    }
+
+    const track = best.track;
 
     await sendYCloudAudio(to, track.audiodownload);
 
