@@ -347,12 +347,28 @@ const server = http.createServer((req, res) => {
                 ) {
                     const from = ycloudMessage.from;
                     const text = ycloudMessage.text.body.trim();
+                    const groupId = ycloudMessage.groupId || null;
+                    const senderName =
+                        ycloudMessage.customerProfile?.name || null;
+                    const messageId =
+                        ycloudMessage.wamid || ycloudMessage.id || null;
 
-                    log('☁️ YCLOUD CHATBOT MESSAGE:', from, text);
+                    log(
+                        '☁️ YCLOUD CHATBOT MESSAGE:',
+                        groupId ? `GROUP ${groupId}` : from,
+                        senderName || '',
+                        text
+                    );
 
-                    handleYCloudMessage(from, text)
+                    handleYCloudMessage({
+                        from,
+                        text,
+                        groupId,
+                        senderName,
+                        messageId
+                    })
                         .then(reply => {
-                            log('☁️ YCLOUD CHATBOT REPLY:', reply);
+                            log('☁️ YCLOUD CHATBOT REPLY:', reply || '');
                         })
                         .catch(error => {
                             log('❌ YCLOUD CHATBOT ERROR:', error.message);
