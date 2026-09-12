@@ -9,7 +9,7 @@ const conversations = new Map();
 function callAI(userMessage, history = []) {
     return new Promise((resolve, reject) => {
         const payload = JSON.stringify({
-            model: 'openai',
+            model: 'gpt-5.6-sol',
             messages: [
                 {
                     role: 'system',
