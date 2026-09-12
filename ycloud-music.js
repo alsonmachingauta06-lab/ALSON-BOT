@@ -118,8 +118,9 @@ function normalizeText(text) {
     return String(text || '')
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[0300-036f]/g, '')
-        .replace(/\s+/g, ' ')
+        .replace(/[\\u0300-\\u036f]/g, '')
+        .replace(/[^a-z0-9 ]/g, ' ')
+        .replace(/\\s+/g, ' ')
         .trim();
 }
 
@@ -127,17 +128,17 @@ function scoreTrack(track, query) {
     const wanted = normalizeText(query).split(' ').filter(Boolean);
     const title = normalizeText(track.name);
     const artist = normalizeText(track.artist_name);
-    const combined = `${title} ${artist}`;
+    const combinedWords = `${title} ${artist}`.split(' ').filter(Boolean);
 
     if (!wanted.length) return 0;
 
-    let matches = 0;
-
-    for (const word of wanted) {
-        if (combined.split(' ').includes(word)) {
-            matches++;
-        }
+    // Single-word searches must match the complete song title.
+    if (wanted.length === 1) {
+        return title === wanted[0] ? 1 : 0;
     }
+
+    // Multi-word searches require every requested word to be present.
+    const matches = wanted.filter(word => combinedWords.includes(word)).length;
 
     return matches / wanted.length;
 }

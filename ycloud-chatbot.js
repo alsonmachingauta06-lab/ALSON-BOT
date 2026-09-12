@@ -173,6 +173,10 @@ async function handleYCloudMessage(from, text) {
         try {
             const track = await handleMusicRequest(from, query);
 
+            if (!track) {
+                return;
+            }
+
             await sendYCloudMessage(
                 from,
                 `🎵 *${track.title}*\n👤 ${track.artist}`
