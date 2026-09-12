@@ -64,6 +64,11 @@ async function searchMusic(query) {
 }
 
 async function sendYCloudAudio(to, audioUrl) {
+    console.log('🎧 YCLOUD AUDIO SEND:', {
+        to,
+        audioUrl
+    });
+
     if (!YCLOUD_API_KEY) {
         throw new Error('YCLOUD_API_KEY is not configured');
     }
@@ -95,6 +100,12 @@ async function sendYCloudAudio(to, audioUrl) {
             });
 
             response.on('end', () => {
+                console.log(
+                    '🎧 YCLOUD AUDIO RESPONSE:',
+                    response.statusCode,
+                    data
+                );
+
                 if (
                     response.statusCode >= 200 &&
                     response.statusCode < 300
