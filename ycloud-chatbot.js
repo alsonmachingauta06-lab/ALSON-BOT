@@ -1,5 +1,5 @@
 const https = require('https');
-
+const { handleMusicRequest } = require('./ycloud-music');
 const YCLOUD_API_KEY = process.env.YCLOUD_API_KEY;
 const POLLINATIONS_API_KEY = process.env.POLLINATIONS_API_KEY;
 const BUSINESS_PHONE = process.env.YCLOUD_BUSINESS_PHONE || '263783549857';
@@ -153,7 +153,43 @@ function sendYCloudMessage(to, text) {
 
 async function handleYCloudMessage(from, text) {
     if (!from || !text) return;
+    const lower = text.toLowerCase();
 
+    if (
+        lower.startsWith('play ') ||
+        lower.startsWith('song ') ||
+        lower.startsWith('music ')
+    ) {
+        const query = text.split(/\s+/).slice(1).join(' ').trim();
+
+        if (!query) {
+            await sendYCloudMessage(
+                from,
+                '🎵 Tell me the song you want me to play.'
+            );
+            return;
+        }
+
+        try {
+            const track = await handleMusicRequest(from, query);
+
+            await sendYCloudMessage(
+                from,
+                `🎵 *${track.title}*\n👤 ${track.artist}`
+            );
+
+            return;
+        } catch (error) {
+            console.error('🎵 MUSIC ERROR:', error.message);
+
+            await sendYCloudMessage(
+                from,
+                '❌ I could not fetch that track right now.'
+            );
+
+            return;
+        }
+    }
     const history = conversations.get(from) || [];
 
     const reply = await callAI(text, history);
