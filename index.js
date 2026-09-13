@@ -3,6 +3,7 @@ const path = require('path');
 const http = require('http');
 const { handleMetaMessage } = require('./meta-chatbot');
 const { handleYCloudMessage } = require('./ycloud-chatbot');
+const { handleWappflyMessage } = require('./wappfly-chatbot');
 
 const log = (...args) =>
     process.stderr.write(
@@ -407,10 +408,54 @@ const server = http.createServer((req, res) => {
 
         req.on('end', () => {
             log('📩 WAPPFLY WEBHOOK RECEIVED');
-            log('WAPPFLY DATA:', body);
 
+            let data;
+
+            try {
+                data = JSON.parse(body);
+            } catch (error) {
+                log('❌ WAPPFLY JSON ERROR:', error.message);
+
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({
+                    ok: false,
+                    error: 'Invalid JSON'
+                }));
+            }
+
+            log('📩 WAPPFLY EVENT:', data.event || 'unknown');
+
+            // Always acknowledge the webhook quickly.
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ ok: true }));
+
+            if (data.event !== 'messages.received') {
+                return;
+            }
+
+            const message = data.data?.messages;
+
+            if (!message) {
+                log('⚠️ WAPPFLY webhook has no message data');
+                return;
+            }
+
+            const key = message.key || {};
+
+            handleWappflyMessage({
+                from:
+                    key.cleanedSenderPn ||
+                    key.remoteJid ||
+                    key.senderPn,
+                remoteJid: key.remoteJid,
+                messageId: key.id,
+                messageBody: message.messageBody,
+                text: message.messageBody,
+                pushName: message.pushName,
+                fromMe: key.fromMe === true
+            }).catch(error => {
+                log('❌ WAPPFLY HANDLER ERROR:', error.message);
+            });
         });
 
         return;
