@@ -1,5 +1,20 @@
 const https = require('https');
 const settings = require('./settings.js');
+const yts = require('yt-search');
+const youtubedl = require('youtube-dl-exec');
+const fs = require('fs');
+const path = require('path');
+const { execFile } = require('child_process');
+const { promisify } = require('util');
+
+const execFileAsync = promisify(execFile);
+
+const DOWNLOAD_DIR = path.join(__dirname, 'tmp');
+
+if (!fs.existsSync(DOWNLOAD_DIR)) {
+    fs.mkdirSync(DOWNLOAD_DIR, { recursive: true });
+}
+
 
 const WAPPFLY_API_TOKEN = process.env.WAPPFLY_API_TOKEN;
 
@@ -158,6 +173,224 @@ Example:
 ✧ *Alson XMD*
 ╚══════════════════════❥❥❥
 © 2025-2026`;
+}
+
+
+async function sendWappflyAudio(to, filePath) {
+    if (!WAPPFLY_API_TOKEN) {
+        throw new Error('WAPPFLY_API_TOKEN is missing');
+    }
+
+    const audioBase64 = fs.readFileSync(filePath).toString('base64');
+
+    const body = JSON.stringify({
+        to,
+        file: audioBase64,
+        mimetype: 'audio/ogg; codecs=opus'
+    });
+
+    return new Promise((resolve, reject) => {
+        const req = https.request(
+            {
+                hostname: 'wappfly.com',
+                path: '/api/messages/audio',
+                method: 'POST',
+                headers: {
+                    'X-API-Token': WAPPFLY_API_TOKEN,
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(body)
+                }
+            },
+            res => {
+                let data = '';
+
+                res.on('data', chunk => {
+                    data += chunk;
+                });
+
+                res.on('end', () => {
+                    if (res.statusCode < 200 || res.statusCode >= 300) {
+                        return reject(
+                            new Error(
+                                `Wappfly audio HTTP ${res.statusCode}: ${data}`
+                            )
+                        );
+                    }
+
+                    try {
+                        const result = JSON.parse(data);
+
+                        if (!result.sent) {
+                            return reject(
+                                new Error(
+                                    `Wappfly audio was not sent: ${data}`
+                                )
+                            );
+                        }
+
+                        resolve(result);
+                    } catch (error) {
+                        reject(
+                            new Error(
+                                `Invalid Wappfly audio response: ${data}`
+                            )
+                        );
+                    }
+                });
+            }
+        );
+
+        req.on('error', reject);
+        req.write(body);
+        req.end();
+    });
+}
+
+async function handleWappflyPlay({ from, text, remoteJid }) {
+    let inputFile = null;
+    let outputFile = null;
+
+    try {
+        const searchQuery = text
+            .trim()
+            .split(/\s+/)
+            .slice(1)
+            .join(' ')
+            .trim();
+
+        const target =
+            remoteJid ||
+            `${normalizeNumber(from)}@s.whatsapp.net`;
+
+        if (!searchQuery) {
+            await sendWappflyText(
+                target,
+                '🎵 Please give me a song name.\n\nExample: play Shape of You'
+            );
+            return;
+        }
+
+        console.log(`🎵 WAPPFLY PLAY SEARCH: ${searchQuery}`);
+
+        const { videos } = await yts(searchQuery);
+
+        if (!videos || videos.length === 0) {
+            await sendWappflyText(
+                target,
+                '❌ I could not find that song.'
+            );
+            return;
+        }
+
+        const video = videos[0];
+
+        console.log(`🎵 WAPPFLY PLAY FOUND: ${video.title}`);
+
+        const safeName = `wappfly_${Date.now()}`;
+
+        const inputTemplate = path.join(
+            DOWNLOAD_DIR,
+            `${safeName}.%(ext)s`
+        );
+
+        inputFile = path.join(
+            DOWNLOAD_DIR,
+            `${safeName}.mp3`
+        );
+
+        outputFile = path.join(
+            DOWNLOAD_DIR,
+            `${safeName}.ogg`
+        );
+
+        await youtubedl(video.url, {
+            noPlaylist: true,
+            noWarnings: true,
+            quiet: true,
+            format: 'bestaudio',
+            extractAudio: true,
+            audioFormat: 'mp3',
+            audioQuality: '5',
+            output: inputTemplate
+        });
+
+        const downloadedFiles = fs.readdirSync(DOWNLOAD_DIR);
+
+        const downloaded = downloadedFiles.find(file =>
+            file.startsWith(safeName + '.')
+        );
+
+        if (!downloaded) {
+            throw new Error(
+                'YouTube download completed but no file was found.'
+            );
+        }
+
+        inputFile = path.join(DOWNLOAD_DIR, downloaded);
+
+        await execFileAsync('ffmpeg', [
+            '-y',
+            '-i',
+            inputFile,
+            '-c:a',
+            'libopus',
+            '-b:a',
+            '96k',
+            '-vbr',
+            'on',
+            outputFile
+        ]);
+
+        if (!fs.existsSync(outputFile)) {
+            throw new Error('FFmpeg did not create the OGG file.');
+        }
+
+        const stats = fs.statSync(outputFile);
+
+        if (!stats.size) {
+            throw new Error('Generated audio file is empty.');
+        }
+
+        await sendWappflyAudio(target, outputFile);
+
+        console.log(
+            `✅ WAPPFLY PLAY SENT: ${video.title}`
+        );
+    } catch (error) {
+        console.error(
+            '❌ WAPPFLY PLAY ERROR:',
+            error.message
+        );
+
+        try {
+            const target =
+                remoteJid ||
+                `${normalizeNumber(from)}@s.whatsapp.net`;
+
+            await sendWappflyText(
+                target,
+                '❌ Failed to download or send that song.'
+            );
+        } catch (sendError) {
+            console.error(
+                '❌ WAPPFLY PLAY ERROR MESSAGE:',
+                sendError.message
+            );
+        }
+    } finally {
+        for (const file of [inputFile, outputFile]) {
+            if (file && fs.existsSync(file)) {
+                try {
+                    fs.unlinkSync(file);
+                } catch (error) {
+                    console.error(
+                        '🧹 WAPPFLY PLAY CLEANUP ERROR:',
+                        error.message
+                    );
+                }
+            }
+        }
+    }
 }
 
 async function handleWappflyMessage({
