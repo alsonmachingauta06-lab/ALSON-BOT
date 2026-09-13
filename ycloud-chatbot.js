@@ -52,7 +52,9 @@ SAFETY:
 function requestModel(model, userMessage, history = []) {
     return new Promise((resolve, reject) => {
         if (!POLLINATIONS_API_KEY) {
-            return reject(new Error('POLLINATIONS_API_KEY is not configured'));
+            return reject(
+                new Error('POLLINATIONS_API_KEY is not configured')
+            );
         }
 
         const payload = JSON.stringify({
@@ -175,7 +177,11 @@ async function callAI(userMessage, history = []) {
     }
 }
 
-function sendYCloudMessage(to, text, contextMessageId = null) {
+function sendYCloudMessage(
+    to,
+    text,
+    contextMessageId = null
+) {
     return new Promise((resolve, reject) => {
         if (!YCLOUD_API_KEY) {
             return reject(
@@ -227,6 +233,7 @@ function sendYCloudMessage(to, text, contextMessageId = null) {
                     } catch {
                         resolve(data);
                     }
+
                     return;
                 }
 
@@ -239,6 +246,7 @@ function sendYCloudMessage(to, text, contextMessageId = null) {
         });
 
         request.on('error', reject);
+
         request.write(payload);
         request.end();
     });
@@ -262,6 +270,24 @@ function ownerReply() {
 📞 WhatsApp: +263783549857`;
 }
 
+/*
+ * NATURAL MUSIC DETECTION
+ *
+ * Examples detected:
+ *
+ * play faded
+ * play me faded
+ * song faded
+ * music faded
+ * send me the song faded
+ * give me the audio faded
+ * audio of faded
+ * song called faded
+ * track called faded
+ * download the song faded
+ * find me the music faded
+ */
+
 function isMusicRequest(text) {
     const lower = text.trim().toLowerCase();
 
@@ -281,9 +307,22 @@ function extractMusicQuery(text) {
         .replace(/^play\s+/i, '')
         .replace(/^song\s+/i, '')
         .replace(/^music\s+/i, '')
-        .replace(/^.*?\b(?:song|track|audio|music)\s+(?:called|named)\s+/i, '')
-        .replace(/^.*?\b(?:audio|song|track)\s+of\s+/i, '')
-        .replace(/^.*?\b(?:play|find|get|download|send)\s+(?:me\s+)?(?:the\s+)?(?:song|track|audio|music)\s+/i, '')
+        .replace(
+            /^.*?\b(?:song|track|audio|music)\s+(?:called|named)\s+/i,
+            ''
+        )
+        .replace(
+            /^.*?\b(?:audio|song|track)\s+of\s+/i,
+            ''
+        )
+        .replace(
+            /^.*?\b(?:play|find|get|download|send)\s+(?:me\s+)?(?:the\s+)?(?:song|track|audio|music)\s+/i,
+            ''
+        )
+        .replace(
+            /^(?:give|send)\s+me\s+(?:the\s+)?(?:song|audio|track)\s+/i,
+            ''
+        )
         .trim();
 
     return query;
@@ -308,17 +347,18 @@ async function handleYCloudMessage({
         ? `group:${groupId}`
         : `dm:${from}`;
 
-    const lower = cleanText.toLowerCase();
-
     console.log(
         '☁️ YCLOUD ROUTE:',
-        groupId ? `GROUP ${groupId}` : `DM ${from}`,
+        groupId
+            ? `GROUP ${groupId}`
+            : `DM ${from}`,
         senderName || ''
     );
 
     /*
      * OWNER INFORMATION
      */
+
     if (looksLikeOwnerRequest(cleanText)) {
         const reply = ownerReply();
 
@@ -334,8 +374,19 @@ async function handleYCloudMessage({
     /*
      * MUSIC
      */
+
     if (isMusicRequest(cleanText)) {
         const query = extractMusicQuery(cleanText);
+
+        console.log(
+            '🎵 MUSIC DETECTED:',
+            cleanText
+        );
+
+        console.log(
+            '🎵 MUSIC QUERY:',
+            query
+        );
 
         if (!query) {
             const reply =
@@ -387,6 +438,7 @@ async function handleYCloudMessage({
             );
 
             return reply;
+
         } catch (error) {
             console.error(
                 '🎵 MUSIC ERROR:',
@@ -409,6 +461,7 @@ async function handleYCloudMessage({
     /*
      * AI CONVERSATION
      */
+
     const history =
         conversations.get(conversationKey) || [];
 
@@ -452,6 +505,7 @@ async function handleYCloudMessage({
         );
 
         return reply;
+
     } catch (error) {
         console.error(
             '☁️ YCLOUD AI ERROR:',
