@@ -142,11 +142,14 @@ function buildMenu() {
 ┃ 👤 Owner: *${settings.botOwner || 'Alson Machingauta'}*
 ┃ 🤖 Bot: *${settings.botName || 'Alson XMD'}*
 ┃ 🧠 Version: *${settings.version || '1.0.0'}*
-┃ 📞 Number: *${settings.ownerNumber || '263783549857'}*
+┃ 📞 Owner 1: *263783549857*
+┃ 📞 Owner 2: *263786359833*
 ┃ 📥 Prefix: *None*
 ┃ 🌍 Timezone: *${settings.timezone || 'Africa/Harare'}*
 ┃ ⏰ Time: *${time}*
 ┃ 📅 Date: *${date}*
+┃ 📢 Channel: *Alson XMD*
+┃ 🔗 https://whatsapp.com/channel/0029Vb8pa9p5kg7CkpkxrR37
 ┃ 💻 Mode: *Private*
 ╰━━━━━━━━━━━━━━━━━━╯
 
@@ -157,6 +160,8 @@ function buildMenu() {
 ┃ ❓ *help*
 ┃ 🤖 *bot*
 ┃ 📃 *list*
+┃ 🎵 *play <song>*
+┃ 📢 *Follow our channel*
 ┃
 ╰━━━━━━━━━━━━━━━━━━╯
 
@@ -175,6 +180,136 @@ Example:
 © 2025-2026`;
 }
 
+
+async function sendWappflyImage(to, filePath, caption = '') {
+    if (!WAPPFLY_API_TOKEN) {
+        throw new Error('WAPPFLY_API_TOKEN is missing');
+    }
+
+    const file = fs.readFileSync(filePath).toString('base64');
+
+    const body = JSON.stringify({
+        to,
+        file,
+        caption,
+        mimetype: 'image/jpeg'
+    });
+
+    return new Promise((resolve, reject) => {
+        const req = https.request(
+            {
+                hostname: 'wappfly.com',
+                path: '/api/messages/image',
+                method: 'POST',
+                headers: {
+                    'X-API-Token': WAPPFLY_API_TOKEN,
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(body)
+                }
+            },
+            res => {
+                let data = '';
+
+                res.on('data', chunk => {
+                    data += chunk;
+                });
+
+                res.on('end', () => {
+                    if (res.statusCode < 200 || res.statusCode >= 300) {
+                        return reject(
+                            new Error(`Wappfly image HTTP ${res.statusCode}: ${data}`)
+                        );
+                    }
+
+                    try {
+                        const result = JSON.parse(data);
+
+                        if (!result.sent) {
+                            return reject(
+                                new Error(`Wappfly image was not sent: ${data}`)
+                            );
+                        }
+
+                        resolve(result);
+                    } catch (error) {
+                        reject(
+                            new Error(`Invalid Wappfly image response: ${data}`)
+                        );
+                    }
+                });
+            }
+        );
+
+        req.on('error', reject);
+        req.write(body);
+        req.end();
+    });
+}
+
+async function sendWappflyVideo(to, filePath, caption = '') {
+    if (!WAPPFLY_API_TOKEN) {
+        throw new Error('WAPPFLY_API_TOKEN is missing');
+    }
+
+    const file = fs.readFileSync(filePath).toString('base64');
+
+    const body = JSON.stringify({
+        to,
+        file,
+        caption,
+        mimetype: 'video/mp4'
+    });
+
+    return new Promise((resolve, reject) => {
+        const req = https.request(
+            {
+                hostname: 'wappfly.com',
+                path: '/api/messages/video',
+                method: 'POST',
+                headers: {
+                    'X-API-Token': WAPPFLY_API_TOKEN,
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(body)
+                }
+            },
+            res => {
+                let data = '';
+
+                res.on('data', chunk => {
+                    data += chunk;
+                });
+
+                res.on('end', () => {
+                    if (res.statusCode < 200 || res.statusCode >= 300) {
+                        return reject(
+                            new Error(`Wappfly video HTTP ${res.statusCode}: ${data}`)
+                        );
+                    }
+
+                    try {
+                        const result = JSON.parse(data);
+
+                        if (!result.sent) {
+                            return reject(
+                                new Error(`Wappfly video was not sent: ${data}`)
+                            );
+                        }
+
+                        resolve(result);
+                    } catch (error) {
+                        reject(
+                            new Error(`Invalid Wappfly video response: ${data}`)
+                        );
+                    }
+                });
+            }
+        );
+
+        req.on('error', reject);
+        req.write(body);
+        req.end();
+    });
+}
 
 async function sendWappflyAudio(to, filePath) {
     if (!WAPPFLY_API_TOKEN) {
@@ -466,9 +601,36 @@ async function handleWappflyMessage({
                 reply = buildMenu();
             }
 
+            const target =
+                remoteJid ||
+                `${normalizeNumber(from)}@s.whatsapp.net`;
+
             console.log(`📤 WAPPFLY sending ${command} response`);
 
-            await sendWappflyText(from, reply);
+            if (command === 'menu') {
+                const menuImage = path.join(__dirname, 'media', 'menu.jpg');
+                const menuVideo = path.join(__dirname, 'media', 'menu.mp4');
+
+                if (fs.existsSync(menuImage)) {
+                    await sendWappflyImage(
+                        target,
+                        menuImage,
+                        '🤖 *ALSON XMD*'
+                    );
+                    console.log('🖼️ WAPPFLY menu image sent');
+                }
+
+                if (fs.existsSync(menuVideo)) {
+                    await sendWappflyVideo(
+                        target,
+                        menuVideo,
+                        '🎬 *Alson XMD*'
+                    );
+                    console.log('🎬 WAPPFLY menu video sent');
+                }
+            }
+
+            await sendWappflyText(target, reply);
 
             console.log(`✅ WAPPFLY ${command} response sent`);
             return;
