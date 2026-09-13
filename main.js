@@ -1599,6 +1599,7 @@ case userMessage.startsWith('.setgpp'):
                 break;
 
        case userMessage.startsWith('.play'):
+    console.log('🔥 ENTERING .PLAY CASE — ABOUT TO CALL playCommand');
     await playCommand(sock, chatId, message);
     commandExecuted = true;
     break;
