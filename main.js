@@ -441,10 +441,13 @@ else if (trimmedText.startsWith('.')) {
 // Only treat the message as a command if the FIRST WORD
 // resolves to a real registered command.
 else if (currentPrefix === '' && trimmedText) {
-    const firstWord = trimmedText.split(/\\s+/)[0];
+    const firstWord = trimmedText.split(/\s+/)[0].toLowerCase();
+    const knownCommands = [
+        'ping', 'menu', 'help', 'bot', 'list',
+        'play', 'music', 'mp3', 'ytmp3'
+    ];
     const resolvedFirst = resolveCommand(firstWord);
-
-    if (resolvedFirst && resolvedFirst !== firstWord.toLowerCase()) {
+    if (knownCommands.includes(firstWord) || knownCommands.includes(resolvedFirst)) {
         isCommand = true;
         commandWithoutPrefix = trimmedText;
     }

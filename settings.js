@@ -80,7 +80,7 @@ const settings = {
   
   // ========== BOT CONFIGURATION ==========
   timezone: 'Africa/Harare',
-  prefix: '.',
+  prefix: '',
   ownerNumber: '263783549857',
   commandMode: "private",
   
