@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const { handleMetaMessage } = require('./meta-chatbot');
+const { handleGreenApiMessage } = require('./greenapi-chatbot');
 const { handleYCloudMessage } = require('./ycloud-chatbot');
 const { handleWappflyMessage } = require('./wappfly-chatbot');
 
@@ -455,6 +456,74 @@ const server = http.createServer((req, res) => {
                 fromMe: key.fromMe === true
             }).catch(error => {
                 log('❌ WAPPFLY HANDLER ERROR:', error.message);
+            });
+        });
+
+        return;
+    }
+
+    if (req.method === 'POST' && req.url === '/greenapi-webhook') {
+        let body = '';
+
+        req.on('data', chunk => {
+            body += chunk;
+        });
+
+        req.on('end', () => {
+            log('📩 GREEN-API WEBHOOK RECEIVED');
+
+            let data;
+
+            try {
+                data = JSON.parse(body);
+            } catch (error) {
+                log('❌ GREEN-API JSON ERROR:', error.message);
+
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({
+                    ok: false,
+                    error: 'Invalid JSON'
+                }));
+            }
+
+            log('🟢 GREEN-API EVENT:', data.typeWebhook || 'unknown');
+
+            // Acknowledge immediately.
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ ok: true }));
+
+            if (data.typeWebhook !== 'incomingMessageReceived') {
+                return;
+            }
+
+            const messageData = data.messageData || {};
+            const senderData = data.senderData || {};
+
+            const text =
+                messageData.textMessageData?.textMessage ||
+                '';
+
+            const chatId =
+                senderData.chatId ||
+                senderData.sender ||
+                '';
+
+            const senderName =
+                senderData.senderName ||
+                '';
+
+            if (!chatId || !text) {
+                log('⚠️ GREEN-API webhook has no text message');
+                return;
+            }
+
+            handleGreenApiMessage({
+                chatId,
+                text,
+                senderName,
+                sender: senderData.sender
+            }).catch(error => {
+                log('❌ GREEN-API HANDLER ERROR:', error.message);
             });
         });
 
