@@ -11,7 +11,7 @@ const toGroupStatusCommand = require('./commands/togroupstatus');
 //Telegram: t.me/AlsonMachingauta
 //GitHub: AlsonMachingautah
 //WhatsApp: +263783549857 
-//want more free bot scripts? subscribe to my youtube channel: https://youtube.com/@AlsonMachingautay
+//want more free bot scripts? subscribe to my youtube channel: https://youtube.com/@AlsonMachingauta
 //   * Created By Github: alsonmachingauta06-lab.
 //   * Credit To alson machingauta 
 //   * © 2025 Alson XMD.
@@ -175,6 +175,7 @@ const blurCommand = require('./commands/img-blur');
 const { welcomeCommand, handleJoinEvent } = require('./commands/welcome');
 const { goodbyeCommand, handleLeaveEvent } = require('./commands/goodbye');
 const githubCommand = require('./commands/github');
+const repoCommand = require('./commands/repo');
 const { handleAntiBadwordCommand, handleBadwordDetection } = require('./lib/antibadword');
 const antibadwordCommand = require('./commands/antibadword');
 const { chatbotCommand, handleChatbotResponse } = require('./commands/chatbot');
@@ -1323,8 +1324,8 @@ case userMessage === '.confighelp':
                                  `• Last Update Check: ${lastCheckTime}\n` +
                                  `• Update Available: ${updateStatus.updateAvailable ? 'Yes 🟢' : 'No ✅'}\n\n` +
                                  `🔗 *Links:*\n` +
-                                 `• GitHub: https://github.com/AlsonMachingautah/Alson XMD\n` +
-                                 `• YouTube: https://youtube.com/@AlsonMachingautay\n` +
+                                 `• GitHub: https://github.com/alsonmachingauta06-lab/ALSON-BOT\n` +
+                                 `• YouTube: https://youtube.com/@AlsonMachingauta\n` +
                                  `• Channel: ${global.channelLink}\n\n` +
                                  `📌 *Update Commands:*\n` +
                                  `• .checkupdate - Check for updates\n` +
@@ -1354,8 +1355,12 @@ case userMessage.startsWith('.unblock'):
     await unblockCommand(sock, chatId, message);
     commandExecuted = true;
     break;
-            case userMessage === '.script':
+          case userMessage === '.script':
     await githubCommand(sock, chatId, message);
+    break;
+          case userMessage === '.repo':
+    await repoCommand(sock, chatId, message);
+    commandExecuted = true;
     break;
           case userMessage.startsWith('.poll'):
     await pollCommand(sock, chatId, message);

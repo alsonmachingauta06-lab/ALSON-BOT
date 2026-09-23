@@ -8,7 +8,7 @@ async function githubCommand(sock, chatId, message) {
         // Show typing indicator
         await sock.sendPresenceUpdate('composing', chatId);
 
-        const res = await fetch('https://api.github.com/repos/AlsonMachingautah/Alson XMD');
+        const res = await fetch('https://api.github.com/repos/alsonmachingauta06-lab/ALSON-BOT');
         if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
         
         const json = await res.json();
@@ -85,7 +85,7 @@ async function githubCommand(sock, chatId, message) {
         console.error('❌ Error in github command:', error);
         
         await sock.sendMessage(chatId, { 
-            text: `*❌ GITHUB REPOSITORY ERROR*\n\nFailed to fetch repository information.\n\n*Error Details:* ${error.message}\n\nPlease try again later or check the repository manually:\nhttps://github.com/AlsonMachingautah/Alson XMD`,
+            text: `*❌ GITHUB REPOSITORY ERROR*\n\nFailed to fetch repository information.\n\n*Error Details:* ${error.message}\n\nPlease try again later or check the repository manually:\nhttps://github.com/alsonmachingauta06-lab/ALSON-BOT`,
             contextInfo: {
                 forwardingScore: 1,
                 isForwarded: true,
@@ -102,7 +102,7 @@ async function githubCommand(sock, chatId, message) {
 // Function to get repository statistics (can be used for other purposes)
 async function getRepoStats() {
     try {
-        const res = await fetch('https://api.github.com/repos/AlsonMachingautah/Alson XMD');
+        const res = await fetch('https://api.github.com/repos/alsonmachingauta06-lab/ALSON-BOT');
         if (!res.ok) throw new Error('Failed to fetch repository data');
         return await res.json();
     } catch (error) {
