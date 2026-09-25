@@ -1,13 +1,17 @@
-
 FROM node:22-bookworm-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y python3 ffmpeg && ln -s /usr/bin/python3 /usr/bin/python && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    ffmpeg \
+    yt-dlp \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
-RUN npm install
+
+RUN YOUTUBE_DL_SKIP_DOWNLOAD=true npm install
 
 COPY . .
 
-CMD ["node", "index.js"]
+CMD ["node", "--expose-gc", "index.js"]
