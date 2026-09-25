@@ -50,6 +50,8 @@ const {
     handleGroupParticipantUpdate
 } = require('./main');
 
+const { restorePairedSessions } = require('./lib/pairedSessions');
+
 const {
     handleStatusUpdate,
     handleBulkStatusUpdate
@@ -607,10 +609,10 @@ async function startXeonBotInc() {
             state,
             saveCreds
         } =
-           
-await useMultiFileAuthState(
-    '/data/session'
-);
+            await useMultiFileAuthState(
+                '/data/session'
+            );
+
         
 
         let version;
@@ -735,6 +737,12 @@ await useMultiFileAuthState(
         } catch (e) {}
 
         
+
+        try {
+            await restorePairedSessions();
+        } catch (e) {
+            console.log('⚠️ Paired session restore failed:', e?.message || e);
+        }
 
         sock.ev.on(
             'messages.upsert',
