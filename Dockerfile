@@ -14,4 +14,6 @@ RUN YOUTUBE_DL_SKIP_DOWNLOAD=true npm install
 
 COPY . .
 
+RUN mkdir -p /app/tmp
+
 CMD ["node", "--expose-gc", "index.js"]
