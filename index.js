@@ -607,10 +607,10 @@ async function startXeonBotInc() {
             state,
             saveCreds
         } =
-            await useMultiFileAuthState(
-                './session'
-            );
-
+           
+await useMultiFileAuthState(
+    '/data/session'
+);
         
 
         let version;
