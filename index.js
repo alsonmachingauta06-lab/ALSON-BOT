@@ -605,13 +605,13 @@ async function startXeonBotInc() {
 
         
 
+        const sessionDir = process.env.ALSON_SESSION_DIR || './session';
+
         const {
             state,
             saveCreds
         } =
-            await useMultiFileAuthState(
-                process.env.ALSON_SESSION_DIR || './session'
-            );
+            await useMultiFileAuthState(sessionDir);
 
         
 
@@ -1253,7 +1253,7 @@ async function startXeonBotInc() {
                             try {
 
                                 rmSync(
-                                    './session',
+                                    sessionDir,
                                     {
                                         recursive: true,
                                         force: true
