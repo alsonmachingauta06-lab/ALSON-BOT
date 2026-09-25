@@ -610,7 +610,7 @@ async function startXeonBotInc() {
             saveCreds
         } =
             await useMultiFileAuthState(
-                './session'
+                process.env.ALSON_SESSION_DIR || './session'
             );
 
         
