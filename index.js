@@ -610,7 +610,7 @@ async function startXeonBotInc() {
             saveCreds
         } =
             await useMultiFileAuthState(
-                '/data/session'
+                require('fs').existsSync('/data') ? '/data/session' : './session'
             );
 
         
