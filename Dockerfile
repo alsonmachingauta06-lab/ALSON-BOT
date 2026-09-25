@@ -14,7 +14,7 @@ RUN YOUTUBE_DL_SKIP_DOWNLOAD=true npm install
 
 COPY . .
 
-RUN mkdir -p /app/tmp/antidelete /app/temp
+RUN mkdir -p /app/tmp/antidelete /app/temp /app/session
 
 
 CMD ["node", "--expose-gc", "index.js"]
